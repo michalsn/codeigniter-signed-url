@@ -2,6 +2,12 @@
 
 Sign URLs in your CodeIgniter 4 application. Prevent manual URL manipulation or auto expiry URLs.
 
+[![PHPUnit](https://github.com/michalsn/codeigniter-signed-url/actions/workflows/phpunit.yml/badge.svg)](https://github.com/michalsn/codeigniter-htmx/actions/workflows/phpunit.yml)
+[![PHPStan](https://github.com/michalsn/codeigniter-signed-url/actions/workflows/phpstan.yml/badge.svg)](https://github.com/michalsn/codeigniter-htmx/actions/workflows/phpstan.yml)
+[![Deptrac](https://github.com/michalsn/codeigniter-signed-url/actions/workflows/deptrac.yml/badge.svg)](https://github.com/michalsn/codeigniter-htmx/actions/workflows/deptrac.yml)
+[![Coverage Status](https://coveralls.io/repos/github/michalsn/codeigniter-signed-url/badge.svg?branch=develop)](https://coveralls.io/github/michalsn/codeigniter-htmx?branch=develop)
+
+
 ## Installation
 
     composer require michalsn/codeigniter-signed-url
