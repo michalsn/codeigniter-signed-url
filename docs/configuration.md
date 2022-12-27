@@ -32,6 +32,12 @@ By default, this is set to `null`.
 
 This setting allows us to set algorithm that will be used during signing the URLs.
 
+By default, this is set to `sha1`.
+
+!!! note
+
+    If you're not sure what you're doing please stay with the default option.
+
 You can see the list of all available options when running command:
 
     php spark signedurl:algorithms
