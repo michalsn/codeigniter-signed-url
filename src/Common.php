@@ -1,10 +1,12 @@
 <?php
 
+use Michalsn\CodeIgniterSignedUrl\SignedUrl;
+
 if (! function_exists('signedurl')) {
     /**
      * Returns SignedUrl instance.
      */
-    function signedurl()
+    function signedurl(): SignedUrl
     {
         return service('signedurl');
     }

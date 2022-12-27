@@ -48,7 +48,7 @@ class SignedUrl
     /**
      * Reset settings between calls.
      */
-    protected function resetSettings()
+    protected function resetSettings(): void
     {
         $this->tempExpiration = $this->config->expiration;
     }
@@ -56,7 +56,7 @@ class SignedUrl
     /**
      * Set the URL expiration time.
      */
-    public function setExpiration(?int $sec)
+    public function setExpiration(?int $sec): static
     {
         $this->tempExpiration = $sec;
 
@@ -66,7 +66,7 @@ class SignedUrl
     /**
      * Similar to site_url() helper function but with ability of sign the URL.
      */
-    public function siteUrl(array|string $relativePath)
+    public function siteUrl(array|string $relativePath): string
     {
         if (is_array($relativePath)) {
             $relativePath = implode('/', $relativePath);
@@ -79,8 +79,10 @@ class SignedUrl
 
     /**
      * Similar to url_to() helper function but with ability of sign the URL.
+     *
+     * @throws RouterException
      */
-    public function urlTo(string $controller, int|string ...$args)
+    public function urlTo(string $controller, int|string ...$args): string
     {
         if (! $route = route_to($controller, ...$args)) {
             $explode = explode('::', $controller);

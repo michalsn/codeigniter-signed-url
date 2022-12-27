@@ -22,12 +22,12 @@ final class CommonTest extends CIUnitTestCase
         config('Encryption')->key = hex2bin('6ece79d55cd04503600bd97520a0138a067690112fbfb44c704b0c626a7c62a2');
     }
 
-    public function testSignedurl()
+    public function testSignedurl(): void
     {
         $this->assertInstanceOf(SignedUrl::class, signedurl());
     }
 
-    public function testSignedUrlSiteUrl()
+    public function testSignedUrlSiteUrl(): void
     {
         $this->assertSame(
             'https://example.com/index.php/controller/method?signature=ZFCzKztQmn2yGb-ShnNyT5mF4eQ',
@@ -35,7 +35,7 @@ final class CommonTest extends CIUnitTestCase
         );
     }
 
-    public function testSignedUrlSiteUrlWithExpirationTime()
+    public function testSignedUrlSiteUrlWithExpirationTime(): void
     {
         Time::setTestNow('2022-12-25 14:59:11', 'UTC');
 
@@ -45,7 +45,7 @@ final class CommonTest extends CIUnitTestCase
         );
     }
 
-    public function testSignedUrlTo()
+    public function testSignedUrlTo(): void
     {
         $routes = service('routes');
         $routes->add('path/(:num)', 'myController::goto/$1', ['as' => 'gotoPage']);
@@ -56,7 +56,7 @@ final class CommonTest extends CIUnitTestCase
         );
     }
 
-    public function testSignedUrlToWithExpirationTime()
+    public function testSignedUrlToWithExpirationTime(): void
     {
         $routes = service('routes');
         $routes->add('path/(:num)', 'myController::goto/$1', ['as' => 'gotoPage']);
@@ -69,14 +69,14 @@ final class CommonTest extends CIUnitTestCase
         );
     }
 
-    public function testSignedUrlToThrowControllerNotFound()
+    public function testSignedUrlToThrowControllerNotFound(): void
     {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage('Controller or its method is not found: Controller::method');
         signedurl()->urlTo('Controller::method', 13);
     }
 
-    public function testSignedUrlToThrowInvalidRoute()
+    public function testSignedUrlToThrowInvalidRoute(): void
     {
         $this->expectException(RouterException::class);
         $this->expectExceptionMessage('The route for "gotoPage" cannot be found.');

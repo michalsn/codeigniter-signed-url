@@ -27,7 +27,7 @@ final class SignedUrlTest extends CIUnitTestCase
         config('Encryption')->key = hex2bin('6ece79d55cd04503600bd97520a0138a067690112fbfb44c704b0c626a7c62a2');
     }
 
-    public function testIncorrectAlgorithm()
+    public function testIncorrectAlgorithm(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Algorithm is incorrect, please run command: "php spark signedurl:algorithms" to see available options.');
@@ -37,7 +37,7 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testMissingExpirationKey()
+    public function testMissingExpirationKey(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Expiration key cannot be empty.');
@@ -47,7 +47,7 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testMissingSignatureKey()
+    public function testMissingSignatureKey(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Signature key cannot be empty.');
@@ -57,7 +57,7 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testMissingAlgorithmKey()
+    public function testMissingAlgorithmKey(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Algorithm key cannot be empty.');
@@ -67,7 +67,7 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testSameKeyNames()
+    public function testSameKeyNames(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Expiration, Signature or Algorithm keys cannot share the same name.');
@@ -78,7 +78,7 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testMissingEncryptionKey()
+    public function testMissingEncryptionKey(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Encryption key is missing, please run command: "php spark key:generate"');
@@ -89,7 +89,7 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testSignWithNoExpirationInConfig()
+    public function testSignWithNoExpirationInConfig(): void
     {
         $expectedUrl = 'https://example.com/path?query=string';
         $uri         = new URI($expectedUrl);
@@ -103,7 +103,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertSame($expectedUrl, $url);
     }
 
-    public function testSignWithIncludedAlgorithm()
+    public function testSignWithIncludedAlgorithm(): void
     {
         $expectedUrl = 'https://example.com/path?query=string';
         $uri         = new URI($expectedUrl);
@@ -119,7 +119,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertSame($expectedUrl, $url);
     }
 
-    public function testSignWithExpirationFromConfig()
+    public function testSignWithExpirationFromConfig(): void
     {
         $expectedUrl = 'https://example.com/path?query=string';
         $uri         = new URI($expectedUrl);
@@ -136,7 +136,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertSame($expectedUrl, $url);
     }
 
-    public function testSignWithOverwritenExpirationFromConfig()
+    public function testSignWithOverwritenExpirationFromConfig(): void
     {
         $expectedUrl = 'https://example.com/path?query=string';
         $uri         = new URI($expectedUrl);
@@ -153,7 +153,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertSame($expectedUrl, $url);
     }
 
-    public function testVerifyWithoutExpiration()
+    public function testVerifyWithoutExpiration(): void
     {
         $path = '/path?query=string&signature=T3Y2OoBY2KvUbkTTBpPqjXFgs0k';
         $url  = 'https://example.com' . $path;
@@ -170,7 +170,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertTrue($signedUrl->verify($request));
     }
 
-    public function testVerifyWithExpiration()
+    public function testVerifyWithExpiration(): void
     {
         $path = '/path?query=string&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
         $url  = 'https://example.com' . $path;
@@ -188,7 +188,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertTrue($signedUrl->verify($request));
     }
 
-    public function testVerifyThrowExceptionForMissingSignature()
+    public function testVerifyThrowExceptionForMissingSignature(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('This URL have to be signed.');
@@ -206,7 +206,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl->verify($request);
     }
 
-    public function testVerifyThrowExceptionForInvalidAlgorithm()
+    public function testVerifyThrowExceptionForInvalidAlgorithm(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Algorithm is invalid or not supported.');
@@ -224,7 +224,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl->verify($request);
     }
 
-    public function testVerifyThrowExceptionForUrlNotValid()
+    public function testVerifyThrowExceptionForUrlNotValid(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('URL is not valid.');
@@ -242,7 +242,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl->verify($request);
     }
 
-    public function testVerifyThrowExceptionForExpiredUrl()
+    public function testVerifyThrowExceptionForExpiredUrl(): void
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('This URL has expired.');
@@ -262,14 +262,14 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl->verify($request);
     }
 
-    public function testShouldRedirect()
+    public function testShouldRedirect(): void
     {
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
         $this->assertFalse($signedUrl->shouldRedirect());
     }
 
-    public function testShouldShow404()
+    public function testShouldShow404(): void
     {
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);

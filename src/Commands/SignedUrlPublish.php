@@ -16,6 +16,9 @@ class SignedUrlPublish extends BaseCommand
     protected $name        = 'signedurl:publish';
     protected $description = 'Publish SignedUrl config file into the current application.';
 
+    /**
+     * @return void
+     */
     public function run(array $params)
     {
         $source = service('autoloader')->getNamespace('Michalsn\\CodeIgniterSignedUrl')[0];

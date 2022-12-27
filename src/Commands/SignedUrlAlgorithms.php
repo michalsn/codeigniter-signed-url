@@ -14,6 +14,9 @@ class SignedUrlAlgorithms extends BaseCommand
     protected $name        = 'signedurl:algorithms';
     protected $description = 'Show the list of algorithms that can be used to sign the URL.';
 
+    /**
+     * @return void
+     */
     public function run(array $params)
     {
         $thead = ['#', 'Algorithm'];
