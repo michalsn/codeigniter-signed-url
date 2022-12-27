@@ -50,7 +50,7 @@ final class SignedUrlTest extends CIUnitTestCase
     public function testSameExpirationAndSignatureKey()
     {
         $this->expectException(SignedUrlException::class);
-        $this->expectExceptionMessage('Expiration and Signature keys cannot be the same.');
+        $this->expectExceptionMessage('Expiration, Signature or Algorithm keys cannot share the same name.');
 
         $config                = new SignedUrlConfig();
         $config->expirationKey = 'same';

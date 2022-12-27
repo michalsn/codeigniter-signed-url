@@ -1,9 +1,11 @@
 <?php
 
 return [
+    'incorrectAlgorithm'            => 'Algorithm is incorrect, please run command: "php spark signedurl:algorithms" to see available options.',
     'emptyExpirationKey'            => 'Expiration key cannot be empty.',
     'emptySignatureKey'             => 'Signature key cannot be empty.',
-    'sameExpirationAndSignatureKey' => 'Expiration and Signature keys cannot be the same.',
+    'emptyAlgorithmKey'             => 'Algorithm key cannot be empty.',
+    'sameExpirationAndSignatureKey' => 'Expiration, Signature or Algorithm keys cannot share the same name.',
     'emptyEncryptionKey'            => 'Encryption key is missing, please run command: "php spark key:generate"',
     'missingSignature'              => 'This URL have to be signed.',
     'urlNotValid'                   => 'This URL is not valid.',

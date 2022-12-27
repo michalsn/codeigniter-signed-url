@@ -6,6 +6,11 @@ use RuntimeException;
 
 final class SignedUrlException extends RuntimeException
 {
+    public static function forIncorrectAlgorithm(): static
+    {
+        return new self(lang('SignedUrl.incorrectAlgorithm'));
+    }
+
     public static function forEmptyExpirationKey(): static
     {
         return new self(lang('SignedUrl.emptyExpirationKey'));
@@ -16,9 +21,14 @@ final class SignedUrlException extends RuntimeException
         return new self(lang('SignedUrl.emptySignatureKey'));
     }
 
-    public static function forSameExpirationAndSignatureKey(): static
+    public static function forEmptyAlgorithmKey(): static
     {
-        return new self(lang('SignedUrl.sameExpirationAndSignatureKey'));
+        return new self(lang('SignedUrl.emptyAlgorithmKey'));
+    }
+
+    public static function forSameKeyNames(): static
+    {
+        return new self(lang('SignedUrl.sameKeyNames'));
     }
 
     public static function forEmptyEncryptionKey(): static

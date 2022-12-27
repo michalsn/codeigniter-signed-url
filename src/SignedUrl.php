@@ -16,6 +16,10 @@ class SignedUrl
     {
         $this->key = config('Encryption')->key;
 
+        if (empty($this->config->algorithm) || ! in_array($this->config->algorithm, hash_hmac_algos())) {
+            throw SignedUrlException::forIncorrectAlgorithm();
+        }
+
         if (empty($this->config->expirationKey)) {
             throw SignedUrlException::forEmptyExpirationKey();
         }
@@ -24,8 +28,12 @@ class SignedUrl
             throw SignedUrlException::forEmptySignatureKey();
         }
 
-        if ($this->config->expirationKey === $this->config->signatureKey) {
-            throw SignedUrlException::forSameExpirationAndSignatureKey();
+        if (empty($this->config->algorithmKey)) {
+            throw SignedUrlException::forEmptyAlgorithmKey();
+        }
+
+        if (count(array_unique([$this->config->expirationKey, $this->config->signatureKey, $this->config->algorithmKey])) !== 3) {
+            throw SignedUrlException::forSameKeyNames();
         }
 
         if (empty($this->key)) {
@@ -44,8 +52,12 @@ class SignedUrl
             $uri->addQuery($this->config->expirationKey, Time::now()->addSeconds($expirationTime)->getTimestamp());
         }
 
+        if ($this->config->includeAlgorithmKey) {
+            $uri->addQuery($this->config->algorithmKey, $this->config->algorithm);
+        }
+
         $url       = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
-        $signature = base64url_encode(hash_hmac('sha1', $url, $this->key, true));
+        $signature = base64url_encode(hash_hmac($this->config->algorithm, $url, $this->key, true));
 
         $uri->addQuery($this->config->signatureKey, $signature);
 
@@ -66,13 +78,15 @@ class SignedUrl
             throw SignedUrlException::forMissingSignature();
         }
 
+        $querySignature = base64url_decode($querySignature);
+
         $uri = $request->getUri();
         $uri->stripQuery($this->config->signatureKey);
 
         $url       = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
-        $signature = hash_hmac('sha1', $url, $this->key, true);
+        $signature = hash_hmac($this->config->algorithm, $url, $this->key, true);
 
-        if (base64url_decode($querySignature) !== $signature) {
+        if (! hash_equals($querySignature, $signature)) {
             throw SignedUrlException::forUrlNotValid();
         }
 

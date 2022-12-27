@@ -13,11 +13,29 @@ class SignedUrl extends BaseConfig
     public ?int $expirationTime = null;
 
     /**
+     * Algorithm used to sign the URL.
+     *
+     * For available options, please run:
+     *     php spark signedurl:algorithms
+     *
+     * If you're not sure what you're doing
+     * please stay with the default option.
+     */
+    public string $algorithm = 'sha1';
+
+    /**
      * Query string key names.
      */
     public string $expirationKey = 'expires';
 
     public string $signatureKey = 'signature';
+
+    public string $algorithmKey = 'algorithm';
+
+    /**
+     * Include algorithmKey to the query string.
+     */
+    public bool $includeAlgorithmKey = false;
 
     /**
      * In Filter - redirect to the previous page

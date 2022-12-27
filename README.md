@@ -21,12 +21,24 @@ When we run:
 
 We will get our copy ready for modifications.
 
+**Warning**
+
+Be aware that changing CodeIgniter's `encryption key` will instantly invalidate all the generated URLs.
+
 #### $expirationTime
 
 This setting allows us to set a fixed time after which the signed URL will expire.
 It's number of seconds in unix timestamp that will be added to the current date.
 
 By default, this is set to `null`.
+
+#### $algorithm
+
+This setting allows us to set algorithm that will be used during signing the URLs.
+
+**Warning**
+
+Changing this value without including the used algorithm key to the query string will invalidate all the generated URLs instantly.
 
 #### $expirationKey
 
@@ -43,6 +55,20 @@ This is the name of the query string key, which will be responsible for storing 
 Whatever the name you will choose, treat it as a restricted name and don't use it as a part of the Query String in your code.
 
 By default, this is set to `signature`.
+
+#### $algorithmKey
+
+This is the name of the query string key, which will be responsible for storing the algorithm by which the validity of the entire URL will be checked.
+
+Whatever the name you will choose, treat it as a restricted name and don't use it as a part of the Query String in your code.
+
+By default, this is set to `algorithm`.
+
+#### $includeAlgorithmKey
+
+This setting determines if the algorithm will be included to the query string of the generated URL.
+
+By default, this is set to `false`.
 
 #### $redirect
 
