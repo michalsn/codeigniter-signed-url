@@ -10,7 +10,9 @@ Available options:
 
 ### setExpiration()
 
-With this method we can set temporary value for expiration. Value set here will be resetted after calling method: `siteUrl()`, `urlTo()` or `sign()`.
+With this method we can set temporary value for expiration. The value set here will be reset when the: `siteUrl()`, `urlTo()` or `sign()` methods are called.
+
+This is number of seconds in unix timestamp that will be added to the current date.
 
 ```php
 service('signedurl')->setExpiration(DAY)->siteUrl('url');
