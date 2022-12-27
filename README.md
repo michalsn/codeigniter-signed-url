@@ -1,15 +1,24 @@
 # CodeIgniter Signed URL
 
-Sign URLs in your CodeIgniter 4 applications.
-
-Why do I may need this?
-
-* To prevent manual URL manipulation
-* Or auto expiry URLs
+Sign URLs in your CodeIgniter 4 application. Prevent manual URL manipulation or auto expiry URLs.
 
 ## Installation
 
     composer require michalsn/codeigniter-signed-url
+
+## Overview
+
+We can sign URLs very easy with two main methods that act similar to the helper functions known from CodeIgniter's URL helper.
+
+```php
+echo signedurl()->siteUrl('controller/method?query=string');
+// https://example.com/controller/method?query=string&signature=signature-goes-here
+```
+
+```php
+echo signedurl()->setExpiration(DAY * 2)->urlTo('namedRoute', 12);
+// https://example.com/controller/method/12?expiration=1671980371&signature=signature-goes-here
+```
 
 ## Configuration
 
@@ -35,6 +44,10 @@ By default, this is set to `null`.
 #### $algorithm
 
 This setting allows us to set algorithm that will be used during signing the URLs.
+
+You can see the list of all available options when running command:
+
+    php spark signedurl:algorithms
 
 **Warning**
 
@@ -84,12 +97,28 @@ By default, this is set to `false`.
 
 ## Methods
 
-#### sign()
+#### siteUrl()
 
-With this method we can sign URL and set its expiration date. Usually you won't be using this method directly, since it is used by other helper methods that you're probably used to use.
+This method is similar to the standard `site_url`, but it produces signed URL.
 
 ```php
-service('signedurl')->sign($uri, $expirationTime);
+service('signedurl')->siteUrl('controller/method');
+```
+
+#### urlTo()
+
+This method is similar to the standard `url_to`, but it produces signed URL.
+
+```php
+service('signedurl')->urlTo('namedRoute', 'param');
+```
+
+#### sign()
+
+With this method we can sign URI. Usually you won't be using this method directly, since it is used by other methods.
+
+```php
+service('signedurl')->sign($uri);
 ```
 
 By default `$expirationTime` is set to `null`. If you want the URLs to always be valid for a certain period of time, you can set time in the `$expirationTime` variable in the configuration file.
@@ -103,6 +132,14 @@ service('signedurl')->verify($request);
 ```
 
 The URL verification may take place automatically via Filter class, but you can also make it happen in your Controller instead. The choice is up to you.
+
+#### setExpiration()
+
+With this method we can set temporary value for expiration. Value set here will be resetted after calling method: `siteUrl()`, `urlTo()` or `sign()`.
+
+```php
+service('signedurl')->setExpiration(DAY);
+```
 
 ## Helpers
 
