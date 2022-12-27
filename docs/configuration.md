@@ -12,7 +12,7 @@ We will get our copy ready for modifications.
 
 Available options:
 
-- [$expirationTime](#expirationTime)
+- [$expiration](#expiration)
 - [$algorithm](#algorithm)
 - [$expirationKey](#expirationKey)
 - [$signatureKey](#signatureKey)
@@ -21,7 +21,7 @@ Available options:
 - [$redirect](#redirect)
 - [$show404](#show404)
 
-### $expirationTime
+### $expiration
 
 This setting allows us to set a fixed time after which the signed URL will expire.
 It's number of seconds in unix timestamp that will be added to the current date.

@@ -39,7 +39,7 @@ By default, this filter will throw `SignedUrlException` when the URL won't be si
 * We can redirect to the previous page
 * Or show 404 page
 
-More info you can find in the Config section.
+More info you can find in the [Configuration](configuration.md) page.
 
 !!! note
 
