@@ -5,12 +5,15 @@ namespace Michalsn\CodeIgniterSignedUrl;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\I18n\Time;
+use CodeIgniter\Router\Exceptions\RouterException;
 use Michalsn\CodeIgniterSignedUrl\Config\SignedUrl as SignedUrlConfig;
 use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
 
 class SignedUrl
 {
     protected ?string $key;
+
+    protected ?int $tempExpirationTime;
 
     public function __construct(protected SignedUrlConfig $config)
     {
@@ -39,17 +42,67 @@ class SignedUrl
         if (empty($this->key)) {
             throw SignedUrlException::forEmptyEncryptionKey();
         }
+
+        $this->resetSettings();
     }
 
     /**
-     * Encode URL to signed one
+     * Reset settings between calls.
      */
-    public function sign(URI $uri, ?int $expirationTime = null): string
+    protected function resetSettings()
     {
-        $expirationTime ??= $this->config->expirationTime;
+        $this->tempExpirationTime = $this->config->expirationTime;
+    }
 
-        if ($expirationTime !== null) {
-            $uri->addQuery($this->config->expirationKey, Time::now()->addSeconds($expirationTime)->getTimestamp());
+    /**
+     * Set the URL expiration time.
+     */
+    public function setExpiration(?int $sec)
+    {
+        $this->tempExpirationTime = $sec;
+
+        return $this;
+    }
+
+    /**
+     * Similar to site_url() helper function but with ability of sign the URL.
+     */
+    public function siteUrl(array|string $relativePath)
+    {
+        if (is_array($relativePath)) {
+            $relativePath = implode('/', $relativePath);
+        }
+
+        $uri = _get_uri($relativePath);
+
+        return $this->sign($uri);
+    }
+
+    /**
+     * Similar to url_to() helper function but with ability of sign the URL.
+     */
+    public function urlTo(string $controller, int|string ...$args)
+    {
+        if (! $route = route_to($controller, ...$args)) {
+            $explode = explode('::', $controller);
+
+            if (isset($explode[1])) {
+                throw RouterException::forControllerNotFound($explode[0], $explode[1]);
+            }
+
+            throw RouterException::forInvalidRoute($controller);
+        }
+
+        return $this->siteUrl($route);
+    }
+
+    /**
+     * Transform the URI to signed URL.
+     */
+    public function sign(URI $uri): string
+    {
+        if ($this->tempExpirationTime !== null) {
+            $uri->addQuery($this->config->expirationKey, Time::now()->addSeconds($this->tempExpirationTime)->getTimestamp());
         }
 
         if ($this->config->includeAlgorithmKey) {
@@ -61,7 +114,11 @@ class SignedUrl
 
         $uri->addQuery($this->config->signatureKey, $signature);
 
-        return URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
+        $url = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
+
+        $this->resetSettings();
+
+        return $url;
     }
 
     /**
@@ -73,9 +130,14 @@ class SignedUrl
     {
         $querySignature  = $request->getGet($this->config->signatureKey);
         $queryExpiration = $request->getGet($this->config->expirationKey);
+        $queryAlgorithm  = $request->getGet($this->config->algorithmKey) ?? $this->config->algorithm;
 
         if (empty($querySignature)) {
             throw SignedUrlException::forMissingSignature();
+        }
+
+        if (empty($queryAlgorithm) || ! in_array($queryAlgorithm, hash_hmac_algos())) {
+            throw SignedUrlException::forInvalidAlgorithm();
         }
 
         $querySignature = base64url_decode($querySignature);
@@ -84,7 +146,7 @@ class SignedUrl
         $uri->stripQuery($this->config->signatureKey);
 
         $url       = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
-        $signature = hash_hmac($this->config->algorithm, $url, $this->key, true);
+        $signature = hash_hmac($queryAlgorithm, $url, $this->key, true);
 
         if (! hash_equals($querySignature, $signature)) {
             throw SignedUrlException::forUrlNotValid();

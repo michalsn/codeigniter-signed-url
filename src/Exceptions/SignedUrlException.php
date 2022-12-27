@@ -11,6 +11,11 @@ final class SignedUrlException extends RuntimeException
         return new self(lang('SignedUrl.incorrectAlgorithm'));
     }
 
+    public static function forInvalidAlgorithm(): static
+    {
+        return new self(lang('SignedUrl.invalidAlgorithm'));
+    }
+
     public static function forEmptyExpirationKey(): static
     {
         return new self(lang('SignedUrl.emptyExpirationKey'));

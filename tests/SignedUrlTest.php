@@ -27,6 +27,16 @@ final class SignedUrlTest extends CIUnitTestCase
         config('Encryption')->key = hex2bin('6ece79d55cd04503600bd97520a0138a067690112fbfb44c704b0c626a7c62a2');
     }
 
+    public function testIncorrectAlgorithm()
+    {
+        $this->expectException(SignedUrlException::class);
+        $this->expectExceptionMessage('Algorithm is incorrect, please run command: "php spark signedurl:algorithms" to see available options.');
+
+        $config            = new SignedUrlConfig();
+        $config->algorithm = '';
+        new SignedUrl($config);
+    }
+
     public function testMissingExpirationKey()
     {
         $this->expectException(SignedUrlException::class);
@@ -47,7 +57,17 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
-    public function testSameExpirationAndSignatureKey()
+    public function testMissingAlgorithmKey()
+    {
+        $this->expectException(SignedUrlException::class);
+        $this->expectExceptionMessage('Algorithm key cannot be empty.');
+
+        $config               = new SignedUrlConfig();
+        $config->algorithmKey = '';
+        new SignedUrl($config);
+    }
+
+    public function testSameKeyNames()
     {
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Expiration, Signature or Algorithm keys cannot share the same name.');
@@ -83,6 +103,22 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertSame($expectedUrl, $url);
     }
 
+    public function testSignWithIncludedAlgorithm()
+    {
+        $expectedUrl = 'https://example.com/path?query=string';
+        $uri         = new URI($expectedUrl);
+
+        $config = new SignedUrlConfig();
+        $config->includeAlgorithmKey = true;
+
+        $signedUrl = new SignedUrl($config);
+        $url       = $signedUrl->sign($uri);
+
+        $expectedUrl .= '&algorithm=sha1&signature=fBY7AIRdMqyhRwknzK3lPusRoWw';
+
+        $this->assertSame($expectedUrl, $url);
+    }
+
     public function testSignWithExpirationFromConfig()
     {
         $expectedUrl = 'https://example.com/path?query=string';
@@ -110,7 +146,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $config                 = new SignedUrlConfig();
         $config->expirationTime = SECOND * 10;
         $signedUrl              = new SignedUrl($config);
-        $url                    = $signedUrl->sign($uri, SECOND * 20);
+        $url                    = $signedUrl->setExpiration(SECOND * 20)->sign($uri);
 
         $expectedUrl .= '&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
 
@@ -158,6 +194,24 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->expectExceptionMessage('This URL have to be signed.');
 
         $path = '/path?query=string';
+        $url  = 'https://example.com' . $path;
+
+        $_SERVER['REQUEST_URI'] = $path;
+
+        $uri     = new URI($url);
+        $request = new IncomingRequest(new App(), $uri, null, new UserAgent());
+
+        $config    = new SignedUrlConfig();
+        $signedUrl = new SignedUrl($config);
+        $signedUrl->verify($request);
+    }
+
+    public function testVerifyThrowExceptionForInvalidAlgorithm()
+    {
+        $this->expectException(SignedUrlException::class);
+        $this->expectExceptionMessage('Algorithm is invalid or not supported.');
+
+        $path = '/path?query=string&algorithm=fake&signature=fake';
         $url  = 'https://example.com' . $path;
 
         $_SERVER['REQUEST_URI'] = $path;
