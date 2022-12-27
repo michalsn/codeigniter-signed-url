@@ -13,7 +13,7 @@ class SignedUrl
 {
     protected ?string $key;
 
-    protected ?int $tempexpiration;
+    protected ?int $tempExpiration;
 
     public function __construct(protected SignedUrlConfig $config)
     {
