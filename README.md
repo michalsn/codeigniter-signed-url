@@ -138,48 +138,17 @@ The URL verification may take place automatically via Filter class, but you can 
 With this method we can set temporary value for expiration. Value set here will be resetted after calling method: `siteUrl()`, `urlTo()` or `sign()`.
 
 ```php
-service('signedurl')->setExpiration(DAY);
+service('signedurl')->setExpiration(DAY)->siteUrl('url');
 ```
 
 ## Helpers
 
-#### signed_site_url()
+#### signedurl()
 
-This helper is similar to standard `site_url()`, except that in the second parameter you can set expiration date. It's number of seconds since **now** in Unix timestamp.
-```php
-signed_site_url('controller/method');
-// https://example.com/controller/method?signature=TAxnWuXpqnKJ0C5A8nCedWYFvpw
-```
+This function returns the `SignedUrl` class instance.
 
 ```php
-signed_site_url('controller/method', DAY);
-// https://example.com/controller/method?expires=1672079033&signature=2XAKiFWYBPambJ7djstsHkUSJvk
-```
-
-#### signed_anchor()
-
-This helper is similar to standard `anchor()`, except that in the second parameter you can set expiration date. It's number of seconds since **now** in Unix timestamp.
-```php
-signed_anchor('controller/method');
-// https://example.com/controller/method?signature=TAxnWuXpqnKJ0C5A8nCedWYFvpw
-```
-
-```php
-signed_anchor('controller/method', DAY);
-// https://example.com/controller/method?expires=1672079033&signature=2XAKiFWYBPambJ7djstsHkUSJvk
-```
-
-#### signed_route_to()
-
-This helper is similar to standard `route_to()`, except that in the second parameter you can set expiration date. It's number of seconds since **now** in Unix timestamp.
-```php
-signed_route_to('namedRoute');
-// https://example.com/controller/method?signature=TAxnWuXpqnKJ0C5A8nCedWYFvpw
-```
-
-```php
-signed_route_to('namedRoute', DAY);
-// https://example.com/controller/method?expires=1672079033&signature=2XAKiFWYBPambJ7djstsHkUSJvk
+signedurl()->setExpiration(DAY)->siteUrl('controller/method');
 ```
 
 ## Filters
