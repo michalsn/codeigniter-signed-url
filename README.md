@@ -1,6 +1,6 @@
 # CodeIgniter Signed URL
 
-Sign URLs in your CodeIgniter 4 application. Prevent manual URL manipulation or auto expiry URLs.
+Prevent manual URL manipulation and auto expiry URLs.
 
 [![PHPUnit](https://github.com/michalsn/codeigniter-signed-url/actions/workflows/phpunit.yml/badge.svg)](https://github.com/michalsn/codeigniter-htmx/actions/workflows/phpunit.yml)
 [![PHPStan](https://github.com/michalsn/codeigniter-signed-url/actions/workflows/phpstan.yml/badge.svg)](https://github.com/michalsn/codeigniter-htmx/actions/workflows/phpstan.yml)
@@ -23,7 +23,7 @@ echo signedurl()->siteUrl('controller/method?query=string');
 
 ```php
 echo signedurl()->setExpiration(DAY * 2)->urlTo('namedRoute', 12);
-// https://example.com/controller/method/12?expiration=1671980371&signature=signature-goes-here
+// https://example.com/route/name/12?expiration=1671980371&signature=signature-goes-here
 ```
 
 ## Configuration
