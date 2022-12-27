@@ -126,10 +126,10 @@ final class SignedUrlTest extends CIUnitTestCase
 
         Time::setTestNow('2022-12-25 14:59:11', 'UTC');
 
-        $config                 = new SignedUrlConfig();
-        $config->expirationTime = SECOND * 10;
-        $signedUrl              = new SignedUrl($config);
-        $url                    = $signedUrl->sign($uri);
+        $config             = new SignedUrlConfig();
+        $config->expiration = SECOND * 10;
+        $signedUrl          = new SignedUrl($config);
+        $url                = $signedUrl->sign($uri);
 
         $expectedUrl .= '&expires=1671980361&signature=ILQnUh4hW3O9qEM541lZFgexlB4';
 

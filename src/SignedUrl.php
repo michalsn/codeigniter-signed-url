@@ -13,7 +13,7 @@ class SignedUrl
 {
     protected ?string $key;
 
-    protected ?int $tempExpirationTime;
+    protected ?int $tempexpiration;
 
     public function __construct(protected SignedUrlConfig $config)
     {
@@ -51,7 +51,7 @@ class SignedUrl
      */
     protected function resetSettings()
     {
-        $this->tempExpirationTime = $this->config->expirationTime;
+        $this->tempExpiration = $this->config->expiration;
     }
 
     /**
@@ -59,7 +59,7 @@ class SignedUrl
      */
     public function setExpiration(?int $sec)
     {
-        $this->tempExpirationTime = $sec;
+        $this->tempExpiration = $sec;
 
         return $this;
     }
@@ -101,8 +101,8 @@ class SignedUrl
      */
     public function sign(URI $uri): string
     {
-        if ($this->tempExpirationTime !== null) {
-            $uri->addQuery($this->config->expirationKey, Time::now()->addSeconds($this->tempExpirationTime)->getTimestamp());
+        if ($this->tempExpiration !== null) {
+            $uri->addQuery($this->config->expirationKey, Time::now()->addSeconds($this->tempExpiration)->getTimestamp());
         }
 
         if ($this->config->includeAlgorithmKey) {

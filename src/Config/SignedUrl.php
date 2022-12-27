@@ -10,7 +10,7 @@ class SignedUrl extends BaseConfig
      * Number of seconds in unix timestamp
      * will be added to the current date.
      */
-    public ?int $expirationTime = null;
+    public ?int $expiration = null;
 
     /**
      * Algorithm used to sign the URL.
