@@ -52,7 +52,8 @@ final class CommonTest extends CIUnitTestCase
 
         $this->assertSame(
             'https://example.com/index.php/path/13?signature=iZd5igbJp6uYIjjLKdiiPkmON0E',
-            signedurl()->urlTo('gotoPage', 13));
+            signedurl()->urlTo('gotoPage', 13)
+        );
     }
 
     public function testSignedUrlToWithExpirationTime()
@@ -64,7 +65,8 @@ final class CommonTest extends CIUnitTestCase
 
         $this->assertSame(
             'https://example.com/index.php/path/13?expires=1671980361&signature=HTGY25XucRbwm9LffdsTWHzn1Eg',
-            signedurl()->setExpiration(SECOND * 10)->urlTo('gotoPage', 13));
+            signedurl()->setExpiration(SECOND * 10)->urlTo('gotoPage', 13)
+        );
     }
 
     public function testSignedUrlToThrowControllerNotFound()

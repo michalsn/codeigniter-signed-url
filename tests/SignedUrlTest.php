@@ -108,7 +108,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $expectedUrl = 'https://example.com/path?query=string';
         $uri         = new URI($expectedUrl);
 
-        $config = new SignedUrlConfig();
+        $config                      = new SignedUrlConfig();
         $config->includeAlgorithmKey = true;
 
         $signedUrl = new SignedUrl($config);

@@ -12,14 +12,13 @@ use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
 class SignedUrl
 {
     protected ?string $key;
-
     protected ?int $tempExpiration;
 
     public function __construct(protected SignedUrlConfig $config)
     {
         $this->key = config('Encryption')->key;
 
-        if (empty($this->config->algorithm) || ! in_array($this->config->algorithm, hash_hmac_algos())) {
+        if (empty($this->config->algorithm) || ! in_array($this->config->algorithm, hash_hmac_algos(), true)) {
             throw SignedUrlException::forIncorrectAlgorithm();
         }
 
@@ -136,7 +135,7 @@ class SignedUrl
             throw SignedUrlException::forMissingSignature();
         }
 
-        if (empty($queryAlgorithm) || ! in_array($queryAlgorithm, hash_hmac_algos())) {
+        if (empty($queryAlgorithm) || ! in_array($queryAlgorithm, hash_hmac_algos(), true)) {
             throw SignedUrlException::forInvalidAlgorithm();
         }
 
