@@ -1,0 +1,64 @@
+{
+    "name": "michalsn/codeigniter-signed-url",
+    "description": "Signing URL functionality for CodeIgniter 4 framework",
+    "license": "MIT",
+    "type": "library",
+    "keywords": ["codeigniter", "codeigniter4", "signing"],
+    "authors": [
+        {
+            "name": "michalsn",
+            "homepage": "https://github.com/michalsn",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/michalsn/codeigniter-signed-url",
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "codeigniter4/devkit": "^1.0",
+        "codeigniter4/framework": "^4.2",
+        "rector/rector": "0.15.1"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Michalsn\\CodeIgniterSignedUrl\\": "src"
+        },
+        "files": ["src/Common.php"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "scripts": {
+        "analyze": [
+            "phpstan analyze",
+            "psalm",
+            "rector process --dry-run"
+        ],
+        "sa": "@analyze",
+        "ci": [
+            "Composer\\Config::disableProcessTimeout",
+            "@cs",
+            "@deduplicate",
+            "@inspect",
+            "@analyze",
+            "@test"
+        ],
+        "cs": "php-cs-fixer fix --ansi --verbose --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix --ansi --verbose --diff",
+        "style": "@cs-fix",
+        "deduplicate": "phpcpd app/ src/",
+        "inspect": "deptrac analyze --cache-file=build/deptrac.cache",
+        "mutate": "infection --threads=2 --skip-initial-tests --coverage=build/phpunit",
+        "test": "phpunit"
+    }
+}
