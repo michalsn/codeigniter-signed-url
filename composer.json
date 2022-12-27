@@ -3,7 +3,7 @@
     "description": "Signing URL functionality for CodeIgniter 4 framework",
     "license": "MIT",
     "type": "library",
-    "keywords": ["codeigniter", "codeigniter4", "signing"],
+    "keywords": ["codeigniter", "codeigniter4", "signed-url"],
     "authors": [
         {
             "name": "michalsn",
