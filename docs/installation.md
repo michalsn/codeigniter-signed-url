@@ -41,7 +41,7 @@ public $files = [
 Make sure that you have generated the encryption key. If not, please run command:
 
 ```console
-php spark generate:key
+php spark key:generate
 ```
 
 !!! warning
