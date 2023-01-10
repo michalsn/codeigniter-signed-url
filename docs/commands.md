@@ -15,7 +15,7 @@ php spark signedurl:publish
 
 ### algorithms
 
-This command will list all avaliable algorithms options to use with `$algorithm` config variable.`.
+This command will list all avaliable algorithms options to use with `$algorithm` config variable.
 
 ```console
 php spark signedurl:algorithms
