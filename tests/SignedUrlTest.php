@@ -153,9 +153,26 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->assertSame($expectedUrl, $url);
     }
 
+    public function testVerifyWithIndexPage(): void
+    {
+        $path = '/index.php/path?query=string&signature=q0qKGOtgw3F153F1W3HZ0hUwxGc';
+        $url  = 'https://example.com' . $path;
+
+        $_SERVER['REQUEST_URI'] = $path;
+
+        $uri       = new URI($url);
+        $request   = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $config    = new SignedUrlConfig();
+        $signedUrl = new SignedUrl($config);
+
+        Time::setTestNow('2022-12-25 14:59:11', 'UTC');
+
+        $this->assertTrue($signedUrl->verify($request));
+    }
+
     public function testVerifyWithoutExpiration(): void
     {
-        $path = '/path?query=string&signature=T3Y2OoBY2KvUbkTTBpPqjXFgs0k';
+        $path = '/path?query=string&signature=9IOk6sKK9VmpboZXQCFa-Xv2BEE';
         $url  = 'https://example.com' . $path;
 
         $_SERVER['REQUEST_URI'] = $path;
@@ -172,7 +189,7 @@ final class SignedUrlTest extends CIUnitTestCase
 
     public function testVerifyWithExpiration(): void
     {
-        $path = '/path?query=string&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
+        $path = '/path?query=string&expires=1671980371&signature=VQ1Nu3FAYcKKO3FrdmjFLk6PxNQ';
         $url  = 'https://example.com' . $path;
 
         $_SERVER['REQUEST_URI'] = $path;
@@ -247,7 +264,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('This URL has expired.');
 
-        $path = '/path?query=string&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
+        $path = '/path?query=string&expires=1671980371&signature=VQ1Nu3FAYcKKO3FrdmjFLk6PxNQ';
         $url  = 'https://example.com' . $path;
 
         $_SERVER['REQUEST_URI'] = $path;
