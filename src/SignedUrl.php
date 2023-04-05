@@ -146,7 +146,7 @@ class SignedUrl
         $uri = $request->getUri();
         $uri->stripQuery($this->config->signatureKey);
 
-        $url       = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
+        $url       = URI::createURIString('', site_url(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
         $signature = hash_hmac($queryAlgorithm, $url, $this->key, true);
 
         if (! hash_equals($querySignature, $signature)) {
