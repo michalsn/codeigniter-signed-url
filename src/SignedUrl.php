@@ -130,7 +130,7 @@ class SignedUrl
     public function verify(IncomingRequest $request): bool
     {
         $querySignature  = $request->getGet($this->config->signatureKey);
-        $queryExpiration = $request->getGet($this->config->expirationKey);
+        $queryExpiration = (int) $request->getGet($this->config->expirationKey);
         $queryAlgorithm  = $request->getGet($this->config->algorithmKey) ?? $this->config->algorithm;
 
         if (empty($querySignature)) {
