@@ -32,7 +32,7 @@ By default, this is set to `null`.
 
 This setting allows us to set algorithm that will be used during signing the URLs.
 
-By default, this is set to `sha1`.
+By default, this is set to `sha256`.
 
 !!! note
 
