@@ -30,7 +30,7 @@ final class CommonTest extends CIUnitTestCase
     public function testSignedUrlSiteUrl(): void
     {
         $this->assertSame(
-            'https://example.com/index.php/controller/method?signature=ZFCzKztQmn2yGb-ShnNyT5mF4eQ',
+            'https://example.com/index.php/controller/method?signature=I0a1XPGLCTlRQo5c5f3LCz9R-tKP244-6pKCRV54AEk',
             signedurl()->siteUrl(['controller', 'method'])
         );
     }
@@ -40,7 +40,7 @@ final class CommonTest extends CIUnitTestCase
         Time::setTestNow('2022-12-25 14:59:11', 'UTC');
 
         $this->assertSame(
-            'https://example.com/index.php/controller/method?expires=1671980361&signature=byUOHLW6p45GrUpMsVz3AlEBMYs',
+            'https://example.com/index.php/controller/method?expires=1671980361&signature=9ZKau6qjzGOPY6unRPozK7dtZB1k_5hHQ9j3pwaQmzU',
             signedurl()->setExpiration(SECOND * 10)->siteUrl('controller/method')
         );
     }
@@ -51,7 +51,7 @@ final class CommonTest extends CIUnitTestCase
         $routes->add('path/(:num)', 'myController::goto/$1', ['as' => 'gotoPage']);
 
         $this->assertSame(
-            'https://example.com/index.php/path/13?signature=iZd5igbJp6uYIjjLKdiiPkmON0E',
+            'https://example.com/index.php/path/13?signature=niwm-RgYXkGSKzuEH1semjC6TU5T8WrHs7FvEEyD8uQ',
             signedurl()->urlTo('gotoPage', 13)
         );
     }
@@ -64,7 +64,7 @@ final class CommonTest extends CIUnitTestCase
         Time::setTestNow('2022-12-25 14:59:11', 'UTC');
 
         $this->assertSame(
-            'https://example.com/index.php/path/13?expires=1671980361&signature=HTGY25XucRbwm9LffdsTWHzn1Eg',
+            'https://example.com/index.php/path/13?expires=1671980361&signature=pHMHFrXI74G5JuQc1mUUETznuUNnpHkwhAOsjazxlUw',
             signedurl()->setExpiration(SECOND * 10)->urlTo('gotoPage', 13)
         );
     }

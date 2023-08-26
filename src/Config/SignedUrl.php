@@ -21,7 +21,7 @@ class SignedUrl extends BaseConfig
      * If you're not sure what you're doing
      * please stay with the default option.
      */
-    public string $algorithm = 'sha1';
+    public string $algorithm = 'sha256';
 
     /**
      * Query string key names.

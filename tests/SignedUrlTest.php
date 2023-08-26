@@ -2,11 +2,14 @@
 
 namespace Tests;
 
+use CodeIgniter\Config\Factories;
 use CodeIgniter\Config\Services;
 use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\HTTP\SiteURIFactory;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\HTTP\UserAgent;
 use CodeIgniter\I18n\Time;
+use CodeIgniter\Superglobals;
 use CodeIgniter\Test\CIUnitTestCase;
 use Config\App;
 use Michalsn\CodeIgniterSignedUrl\Config\SignedUrl as SignedUrlConfig;
@@ -18,13 +21,41 @@ use Michalsn\CodeIgniterSignedUrl\SignedUrl;
  */
 final class SignedUrlTest extends CIUnitTestCase
 {
+    private App $config;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         Services::reset(true);
 
+        $this->config            = new App();
+        $this->config->baseURL   = 'http://example.com/';
+        $this->config->indexPage = '';
+
+        $_SERVER['HTTP_HOST']   = 'example.com';
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['SCRIPT_NAME'] = '';
+
         config('Encryption')->key = hex2bin('6ece79d55cd04503600bd97520a0138a067690112fbfb44c704b0c626a7c62a2');
+    }
+
+    private function createRequest(?App $config = null, $body = null, ?string $path = null)
+    {
+        $config ??= new App();
+
+        $factory = new SiteURIFactory($config, new Superglobals());
+        $uri     = $factory->createFromGlobals();
+
+        if ($path !== null) {
+            $uri->setPath($path);
+        }
+
+        $request = new IncomingRequest($config, $uri, $body, new UserAgent());
+
+        Factories::injectMock('config', 'App', $config);
+
+        return $request;
     }
 
     public function testIncorrectAlgorithm(): void
@@ -98,7 +129,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl = new SignedUrl($config);
         $url       = $signedUrl->sign($uri);
 
-        $expectedUrl .= '&signature=T3Y2OoBY2KvUbkTTBpPqjXFgs0k';
+        $expectedUrl .= '&signature=ongZW4ttfJMqN757mwNXp5kx_3snwQhaDyI6JiV-5FM';
 
         $this->assertSame($expectedUrl, $url);
     }
@@ -114,7 +145,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl = new SignedUrl($config);
         $url       = $signedUrl->sign($uri);
 
-        $expectedUrl .= '&algorithm=sha1&signature=fBY7AIRdMqyhRwknzK3lPusRoWw';
+        $expectedUrl .= '&algorithm=sha256&signature=IldvSUQVJqTc8Gq47i0pEvuUYNjK_oRX1PAw-ZaXyM4';
 
         $this->assertSame($expectedUrl, $url);
     }
@@ -131,7 +162,7 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl          = new SignedUrl($config);
         $url                = $signedUrl->sign($uri);
 
-        $expectedUrl .= '&expires=1671980361&signature=ILQnUh4hW3O9qEM541lZFgexlB4';
+        $expectedUrl .= '&expires=1671980361&signature=qohLh7fvypmDF9vktdJ6DBXH6fiKyBezNQblosN2sbA';
 
         $this->assertSame($expectedUrl, $url);
     }
@@ -148,20 +179,20 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl          = new SignedUrl($config);
         $url                = $signedUrl->setExpiration(SECOND * 20)->sign($uri);
 
-        $expectedUrl .= '&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
+        $expectedUrl .= '&expires=1671980371&signature=IzHjHhkTOOBPTayZnk8f_ut0H4-3q0YrDb11slKPWWE';
 
         $this->assertSame($expectedUrl, $url);
     }
 
     public function testVerifyWithIndexPage(): void
     {
-        $path = '/index.php/path?query=string&signature=q0qKGOtgw3F153F1W3HZ0hUwxGc';
-        $url  = 'https://example.com' . $path;
+        $this->config->indexPage = 'index.php';
+        $_SERVER['SCRIPT_NAME']  = '/index.php';
 
-        $_SERVER['REQUEST_URI'] = $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string&signature=joVnKjlHYIeuLtyUW5SnQ-US2FPkWkykZnSmf2D_RZY';
 
-        $uri       = new URI($url);
-        $request   = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $request = $this->createRequest($this->config);
+
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
 
@@ -172,13 +203,10 @@ final class SignedUrlTest extends CIUnitTestCase
 
     public function testVerifyWithoutExpiration(): void
     {
-        $path = '/path?query=string&signature=9IOk6sKK9VmpboZXQCFa-Xv2BEE';
-        $url  = 'https://example.com' . $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string&signature=iBEmAoQ9cPafZ3N05b9jEMj906Nd5nmSsJV7rKzFZSY';
 
-        $_SERVER['REQUEST_URI'] = $path;
+        $request = $this->createRequest($this->config);
 
-        $uri       = new URI($url);
-        $request   = new IncomingRequest(new App(), $uri, null, new UserAgent());
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
 
@@ -189,13 +217,9 @@ final class SignedUrlTest extends CIUnitTestCase
 
     public function testVerifyWithExpiration(): void
     {
-        $path = '/path?query=string&expires=1671980371&signature=VQ1Nu3FAYcKKO3FrdmjFLk6PxNQ';
-        $url  = 'https://example.com' . $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string&expires=1671980371&signature=9GNwvgcsK7jJUPpXe3MK5xFbE0rb5ZBHIjKc1qqWSgU';
 
-        $_SERVER['REQUEST_URI'] = $path;
-
-        $uri     = new URI($url);
-        $request = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $request = $this->createRequest($this->config);
 
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
@@ -210,13 +234,9 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('This URL have to be signed.');
 
-        $path = '/path?query=string';
-        $url  = 'https://example.com' . $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string';
 
-        $_SERVER['REQUEST_URI'] = $path;
-
-        $uri     = new URI($url);
-        $request = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $request = $this->createRequest($this->config);
 
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
@@ -228,13 +248,9 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('Algorithm is invalid or not supported.');
 
-        $path = '/path?query=string&algorithm=fake&signature=fake';
-        $url  = 'https://example.com' . $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string&algorithm=fake&signature=fake';
 
-        $_SERVER['REQUEST_URI'] = $path;
-
-        $uri     = new URI($url);
-        $request = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $request = $this->createRequest($this->config);
 
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
@@ -246,13 +262,9 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('URL is not valid.');
 
-        $path = '/path?query=string123&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
-        $url  = 'https://example.com' . $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string123&expires=1671980371&signature=GSU95yKkJm3DqU5t3ZyYxUpgmBI';
 
-        $_SERVER['REQUEST_URI'] = $path;
-
-        $uri     = new URI($url);
-        $request = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $request = $this->createRequest($this->config);
 
         $config    = new SignedUrlConfig();
         $signedUrl = new SignedUrl($config);
@@ -264,13 +276,9 @@ final class SignedUrlTest extends CIUnitTestCase
         $this->expectException(SignedUrlException::class);
         $this->expectExceptionMessage('This URL has expired.');
 
-        $path = '/path?query=string&expires=1671980371&signature=VQ1Nu3FAYcKKO3FrdmjFLk6PxNQ';
-        $url  = 'https://example.com' . $path;
+        $_SERVER['REQUEST_URI'] = '/path?query=string&expires=1671980371&signature=9GNwvgcsK7jJUPpXe3MK5xFbE0rb5ZBHIjKc1qqWSgU';
 
-        $_SERVER['REQUEST_URI'] = $path;
-
-        $uri     = new URI($url);
-        $request = new IncomingRequest(new App(), $uri, null, new UserAgent());
+        $request = $this->createRequest($this->config);
 
         Time::setTestNow('2022-12-25 15:59:11', 'UTC');
 

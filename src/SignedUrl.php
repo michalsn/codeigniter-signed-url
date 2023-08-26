@@ -3,9 +3,11 @@
 namespace Michalsn\CodeIgniterSignedUrl;
 
 use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\HTTP\SiteURI;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Router\Exceptions\RouterException;
+use Config\App;
 use Michalsn\CodeIgniterSignedUrl\Config\SignedUrl as SignedUrlConfig;
 use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
 
@@ -72,7 +74,11 @@ class SignedUrl
             $relativePath = implode('/', $relativePath);
         }
 
-        $uri = _get_uri($relativePath);
+        $host = service('request')->getUri()->getHost();
+
+        $config = config(App::class);
+
+        $uri = new SiteURI($config, $relativePath, $host);
 
         return $this->sign($uri);
     }
@@ -146,7 +152,7 @@ class SignedUrl
         $uri = $request->getUri();
         $uri->stripQuery($this->config->signatureKey);
 
-        $url       = URI::createURIString('', site_url(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
+        $url       = URI::createURIString('', base_url(), $uri->getPath(), $uri->getQuery(), $uri->getFragment());
         $signature = hash_hmac($queryAlgorithm, $url, $this->key, true);
 
         if (! hash_equals($querySignature, $signature)) {
