@@ -187,7 +187,7 @@ final class SignedUrlTest extends CIUnitTestCase
     public function testVerifyWithIndexPage(): void
     {
         $this->config->indexPage = 'index.php';
-        $_SERVER['SCRIPT_NAME'] = '/index.php';
+        $_SERVER['SCRIPT_NAME']  = '/index.php';
 
         $_SERVER['REQUEST_URI'] = '/path?query=string&signature=joVnKjlHYIeuLtyUW5SnQ-US2FPkWkykZnSmf2D_RZY';
 
