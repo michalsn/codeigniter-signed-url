@@ -26,6 +26,15 @@ echo signedurl()->setExpiration(DAY * 2)->urlTo('namedRoute', 12);
 // https://example.com/route/name/12?expiration=1671980371&signature=signature-goes-here
 ```
 
+## Versions
+
+Versions are not compatible - URLs generated in one version of Signed URL will not work with another version.
+
+| CodeIgniter version | Signed URL version |
+|---------------------|--------------------|
+| `>= 4.4`            | `2.*`              |
+| `< 4.4`             | `1.*`              |
+
 ## Docs
 
 https://michalsn.github.io/codeigniter-signed-url
