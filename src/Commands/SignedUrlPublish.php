@@ -5,15 +5,13 @@ namespace Michalsn\CodeIgniterSignedUrl\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Publisher\Publisher;
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use Throwable;
 
-#[CodeCoverageIgnore]
 class SignedUrlPublish extends BaseCommand
 {
-    protected string $group       = 'SignedUrl';
-    protected string $name        = 'signedurl:publish';
-    protected string $description = 'Publish SignedUrl config file into the current application.';
+    protected $group       = 'SignedUrl';
+    protected $name        = 'signedurl:publish';
+    protected $description = 'Publish SignedUrl config file into the current application.';
 
     /**
      * @return void

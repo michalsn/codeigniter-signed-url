@@ -24,8 +24,9 @@
             <directory suffix=".php">./src/</directory>
         </include>
         <exclude>
+            <directory suffix=".php">./src/Commands</directory>
             <directory suffix=".php">./src/Config</directory>
-            <file>./src/Debug/Toolbar.php</file>
+            <file>./src/Filters/SignedUrl.php</file>
         </exclude>
         <report>
             <clover outputFile="build/phpunit/clover.xml"/>

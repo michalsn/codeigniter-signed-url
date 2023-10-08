@@ -9,14 +9,12 @@ use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 /**
  * SignedUrl filter.
  *
  * This filter is not intended to be used from the command line.
  */
-#[CodeCoverageIgnore]
 class SignedUrl implements FilterInterface
 {
     /**

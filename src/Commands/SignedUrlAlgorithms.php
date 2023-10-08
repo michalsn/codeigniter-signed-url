@@ -4,14 +4,12 @@ namespace Michalsn\CodeIgniterSignedUrl\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
-#[CodeCoverageIgnore]
 class SignedUrlAlgorithms extends BaseCommand
 {
-    protected string $group       = 'SignedUrl';
-    protected string $name        = 'signedurl:algorithms';
-    protected string $description = 'Show the list of algorithms that can be used to sign the URL.';
+    protected $group       = 'SignedUrl';
+    protected $name        = 'signedurl:algorithms';
+    protected $description = 'Show the list of algorithms that can be used to sign the URL.';
 
     /**
      * @return void
