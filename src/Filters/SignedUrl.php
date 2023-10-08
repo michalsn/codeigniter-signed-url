@@ -9,6 +9,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 /**
  * SignedUrl filter.

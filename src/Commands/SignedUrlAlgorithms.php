@@ -4,6 +4,7 @@ namespace Michalsn\CodeIgniterSignedUrl\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 class SignedUrlAlgorithms extends BaseCommand
 {
