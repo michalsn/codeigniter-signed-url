@@ -45,6 +45,12 @@ class SignedUrl extends BaseConfig
     public bool $includeAlgorithmKey = false;
 
     /**
+     * In Filter - redirect to the given URI path
+     * with error on failure.
+     */
+    public ?string $redirectTo = null;
+
+    /**
      * In Filter - redirect to the previous page
      * with error on failure.
      */

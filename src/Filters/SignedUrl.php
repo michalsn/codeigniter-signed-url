@@ -44,6 +44,10 @@ class SignedUrl implements FilterInterface
         try {
             $signedUrl->verify($request);
         } catch (SignedUrlException $e) {
+            if ($path = $signedUrl->shouldRedirectTo()) {
+                return redirect()->to($path)->with('error', $e->getMessage());
+            }
+
             if ($signedUrl->shouldRedirect()) {
                 return redirect()->back()->with('error', $e->getMessage());
             }

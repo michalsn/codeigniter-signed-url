@@ -176,6 +176,14 @@ class SignedUrl
     }
 
     /**
+     * Return redirectTo config option.
+     */
+    public function shouldRedirectTo(): ?string
+    {
+        return $this->config->redirectTo;
+    }
+
+    /**
      * Check if redirect option is enabled.
      */
     public function shouldRedirect(): bool
