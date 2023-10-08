@@ -2,19 +2,18 @@
 
 namespace Michalsn\CodeIgniterSignedUrl\Commands;
 
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Publisher\Publisher;
 use Throwable;
 
-/**
- * @codeCoverageIgnore
- */
+#[CodeCoverageIgnore]
 class SignedUrlPublish extends BaseCommand
 {
-    protected $group       = 'SignedUrl';
-    protected $name        = 'signedurl:publish';
-    protected $description = 'Publish SignedUrl config file into the current application.';
+    protected string $group       = 'SignedUrl';
+    protected string $name        = 'signedurl:publish';
+    protected string $description = 'Publish SignedUrl config file into the current application.';
 
     /**
      * @return void

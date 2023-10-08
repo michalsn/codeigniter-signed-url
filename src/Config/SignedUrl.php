@@ -35,8 +35,7 @@ class SignedUrl extends BaseConfig
      */
     public string $expirationKey = 'expires';
 
-    public string $tokenKey = 'token';
-
+    public string $tokenKey     = 'token';
     public string $signatureKey = 'signature';
     public string $algorithmKey = 'algorithm';
 

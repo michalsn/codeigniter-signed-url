@@ -2,6 +2,7 @@
 
 namespace Michalsn\CodeIgniterSignedUrl\Filters;
 
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -14,9 +15,8 @@ use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
  * SignedUrl filter.
  *
  * This filter is not intended to be used from the command line.
- *
- * @codeCoverageIgnore
  */
+#[CodeCoverageIgnore]
 class SignedUrl implements FilterInterface
 {
     /**
