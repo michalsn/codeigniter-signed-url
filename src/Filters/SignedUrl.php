@@ -14,8 +14,6 @@ use Michalsn\CodeIgniterSignedUrl\Exceptions\SignedUrlException;
  * SignedUrl filter.
  *
  * This filter is not intended to be used from the command line.
- *
- * @codeCoverageIgnore
  */
 class SignedUrl implements FilterInterface
 {

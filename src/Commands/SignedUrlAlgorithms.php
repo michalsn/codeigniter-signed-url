@@ -5,9 +5,6 @@ namespace Michalsn\CodeIgniterSignedUrl\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 
-/**
- * @codeCoverageIgnore
- */
 class SignedUrlAlgorithms extends BaseCommand
 {
     protected $group       = 'SignedUrl';

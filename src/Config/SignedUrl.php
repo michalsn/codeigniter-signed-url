@@ -13,6 +13,13 @@ class SignedUrl extends BaseConfig
     public ?int $expiration = null;
 
     /**
+     * Length of the token string used with
+     * random_string() helper. Useful if you have
+     * very few changing parameters in the URL.
+     */
+    public ?int $token = null;
+
+    /**
      * Algorithm used to sign the URL.
      *
      * For available options, please run:
@@ -28,6 +35,7 @@ class SignedUrl extends BaseConfig
      */
     public string $expirationKey = 'expires';
 
+    public string $tokenKey     = 'token';
     public string $signatureKey = 'signature';
     public string $algorithmKey = 'algorithm';
 

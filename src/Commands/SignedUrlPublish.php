@@ -7,9 +7,6 @@ use CodeIgniter\CLI\CLI;
 use CodeIgniter\Publisher\Publisher;
 use Throwable;
 
-/**
- * @codeCoverageIgnore
- */
 class SignedUrlPublish extends BaseCommand
 {
     protected $group       = 'SignedUrl';

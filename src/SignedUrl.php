@@ -28,6 +28,10 @@ class SignedUrl
             throw SignedUrlException::forEmptyExpirationKey();
         }
 
+        if (empty($this->config->tokenKey)) {
+            throw SignedUrlException::forEmptyTokenKey();
+        }
+
         if (empty($this->config->signatureKey)) {
             throw SignedUrlException::forEmptySignatureKey();
         }
@@ -36,7 +40,7 @@ class SignedUrl
             throw SignedUrlException::forEmptyAlgorithmKey();
         }
 
-        if (count(array_unique([$this->config->expirationKey, $this->config->signatureKey, $this->config->algorithmKey])) !== 3) {
+        if (count(array_unique([$this->config->expirationKey, $this->config->tokenKey, $this->config->signatureKey, $this->config->algorithmKey])) !== 4) {
             throw SignedUrlException::forSameKeyNames();
         }
 
@@ -110,6 +114,11 @@ class SignedUrl
     {
         if ($this->tempExpiration !== null) {
             $uri->addQuery($this->config->expirationKey, Time::now()->addSeconds($this->tempExpiration)->getTimestamp());
+        }
+
+        if ($this->config->token !== null) {
+            helper('text');
+            $uri->addQuery($this->config->tokenKey, random_string('alnum', $this->config->token));
         }
 
         if ($this->config->includeAlgorithmKey) {

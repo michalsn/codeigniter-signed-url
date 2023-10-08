@@ -21,6 +21,11 @@ final class SignedUrlException extends RuntimeException
         return new self(lang('SignedUrl.emptyExpirationKey'));
     }
 
+    public static function forEmptyTokenKey(): static
+    {
+        return new self(lang('SignedUrl.emptyTokenKey'));
+    }
+
     public static function forEmptySignatureKey(): static
     {
         return new self(lang('SignedUrl.emptySignatureKey'));
