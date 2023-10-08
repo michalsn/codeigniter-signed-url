@@ -297,6 +297,13 @@ final class SignedUrlTest extends CIUnitTestCase
         $signedUrl->verify($request);
     }
 
+    public function testShouldRedirectTo(): void
+    {
+        $config    = new SignedUrlConfig();
+        $signedUrl = new SignedUrl($config);
+        $this->assertNull($signedUrl->shouldRedirectTo());
+    }
+
     public function testShouldRedirect(): void
     {
         $config    = new SignedUrlConfig();

@@ -101,6 +101,12 @@ This setting determines if the algorithm will be included to the query string of
 
 By default, this is set to `false`.
 
+### $redirectTo
+
+This setting is used in the Filter to determine whether we will redirect user to the given URI path with the `error`, when URL will not be valid or expired.
+
+By default, this is set to `null`.
+
 ### $redirect
 
 This setting is used in the Filter to determine whether we will redirect user to the previous page with the `error`, when URL will not be valid or expired.
