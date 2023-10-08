@@ -13,8 +13,10 @@ We will get our copy ready for modifications.
 Available options:
 
 - [$expiration](#expiration)
+- [$token](#token)
 - [$algorithm](#algorithm)
 - [$expirationKey](#expirationKey)
+- [$tokenKey](#tokenKey)
 - [$signatureKey](#signatureKey)
 - [$algorithmKey](#algorithmKey)
 - [$includeAlgorithmKey](#includeAlgorithmKey)
@@ -25,6 +27,13 @@ Available options:
 
 This setting allows us to set a fixed time after which the signed URL will expire.
 It's number of seconds in unix timestamp that will be added to the current date.
+
+By default, this is set to `null`.
+
+### $token
+
+This setting allows us to set a randomly generated token with given length.
+It is useful when you have very few changing parameters in the URL.
 
 By default, this is set to `null`.
 
@@ -51,6 +60,16 @@ You can see the list of all available options when running command:
 This is the name of the query string key, which will be responsible for storing the time after which the URL will expire.
 
 By default, this is set to `expires`.
+
+!!! note
+
+    Whatever name you will choose, treat it as a restricted name and don't use it as a part of the query string in your code.
+
+### $tokenKey
+
+This is the name of the query string key, which will be responsible for storing the token string.
+
+By default, this is set to `token`.
 
 !!! note
 

@@ -78,6 +78,16 @@ final class SignedUrlTest extends CIUnitTestCase
         new SignedUrl($config);
     }
 
+    public function testMissingTokenKey(): void
+    {
+        $this->expectException(SignedUrlException::class);
+        $this->expectExceptionMessage('Token key cannot be empty.');
+
+        $config           = new SignedUrlConfig();
+        $config->tokenKey = '';
+        new SignedUrl($config);
+    }
+
     public function testMissingSignatureKey(): void
     {
         $this->expectException(SignedUrlException::class);
@@ -101,7 +111,7 @@ final class SignedUrlTest extends CIUnitTestCase
     public function testSameKeyNames(): void
     {
         $this->expectException(SignedUrlException::class);
-        $this->expectExceptionMessage('Expiration, Signature or Algorithm keys cannot share the same name.');
+        $this->expectExceptionMessage('Expiration, Token, Signature or Algorithm keys cannot share the same name.');
 
         $config                = new SignedUrlConfig();
         $config->expirationKey = 'same';
