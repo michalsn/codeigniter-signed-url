@@ -2,10 +2,10 @@
 
 namespace Michalsn\CodeIgniterSignedUrl\Commands;
 
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Publisher\Publisher;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use Throwable;
 
 #[CodeCoverageIgnore]
