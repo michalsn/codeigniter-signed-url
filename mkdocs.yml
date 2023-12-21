@@ -33,7 +33,7 @@ extra:
       link: https://github.com/michalsn/codeigniter-signed-url
       name: GitHub
 
-site_url: https://michalsn.github.io/codeigniter-signed-url
+site_url: https://michalsn.github.io/codeigniter-signed-url/
 repo_url: https://github.com/michalsn/codeigniter-signed-url
 edit_uri: edit/develop/docs/
 
