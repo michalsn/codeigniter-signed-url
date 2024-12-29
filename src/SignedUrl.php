@@ -20,23 +20,23 @@ class SignedUrl
     {
         $this->key = config('Encryption')->key;
 
-        if (empty($this->config->algorithm) || ! in_array($this->config->algorithm, hash_hmac_algos(), true)) {
+        if ($this->config->algorithm === '' || $this->config->algorithm === '0' || ! in_array($this->config->algorithm, hash_hmac_algos(), true)) {
             throw SignedUrlException::forIncorrectAlgorithm();
         }
 
-        if (empty($this->config->expirationKey)) {
+        if ($this->config->expirationKey === '' || $this->config->expirationKey === '0') {
             throw SignedUrlException::forEmptyExpirationKey();
         }
 
-        if (empty($this->config->tokenKey)) {
+        if ($this->config->tokenKey === '' || $this->config->tokenKey === '0') {
             throw SignedUrlException::forEmptyTokenKey();
         }
 
-        if (empty($this->config->signatureKey)) {
+        if ($this->config->signatureKey === '' || $this->config->signatureKey === '0') {
             throw SignedUrlException::forEmptySignatureKey();
         }
 
-        if (empty($this->config->algorithmKey)) {
+        if ($this->config->algorithmKey === '' || $this->config->algorithmKey === '0') {
             throw SignedUrlException::forEmptyAlgorithmKey();
         }
 
